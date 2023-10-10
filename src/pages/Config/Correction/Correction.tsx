@@ -16,36 +16,31 @@ const Correction = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showConfig, setShowConfig] = useState(false);
 
-  const fetcherQueryWords = async (
-    word: string
-  ): Promise<TDocumentSplitsResp> => {
-    const collection_id = localStorage.getItem("collection-id");
-    const top_k = localStorage.getItem("display-count");
+  // const fetcherQueryWords = async (
+  //   word: string
+  // ): Promise<TDocumentSplitsResp> => {
+  //   const collection_id = localStorage.getItem("collection-id");
+  //   const top_k = localStorage.getItem("display-count");
 
-    return fetcher.post(
-      `/query/${collection_id}`,
-      {
-        queries: [
-          {
-            query: word,
-            top_k,
-          },
-        ],
-      },
-      {
-        headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTExNjIzOTAyMn0.dxXcGF5oPXlVnR26X_yxcl9KcdCPOEN07Si_oaJoSgE`,
-        },
-      }
-    );
-  };
+  //   return fetcher.post(
+  //     `/query/${collection_id}`,
+  //     {
+  //       queries: [
+  //         {
+  //           query: word,
+  //           top_k,
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTExNjIzOTAyMn0.dxXcGF5oPXlVnR26X_yxcl9KcdCPOEN07Si_oaJoSgE`,
+  //       },
+  //     }
+  //   );
+  // };
 
-  const fetcherMultipleQuery = async (
-    word: string
-  ): Promise<TDocumentSplitsResp> => {
-    const collection_id = localStorage.getItem("collection-id");
-    const top_k = localStorage.getItem("display-count");
-
+  const fetcherMultipleQuery = async (): Promise<TDocumentSplitsResp> => {
     return fetcher.post(
       `/multiple-query`,
       {
@@ -68,7 +63,7 @@ const Correction = () => {
     try {
       setIsLoading(true);
       // const resp = await fetcherQueryWords(word);
-      const resp = await fetcherMultipleQuery(word);
+      const resp = await fetcherMultipleQuery();
       setMatchedWords(resp.results[0].results);
     } catch (error) {
       console.error(error);
