@@ -11,6 +11,7 @@ import fetcher from "@/utils/fetcher";
 
 const Correction = () => {
   const [word, setWord] = useState("");
+  const [word_Affiliation, setWord_Affiliation] = useState("");
   const [matchedWords, setMatchedWords] = useState<TDocumentSplit[]>([]);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -40,12 +41,15 @@ const Correction = () => {
   //   );
   // };
 
-  const fetcherMultipleQuery = async (): Promise<TDocumentSplitsResp> => {
+  const fetcherMultipleQuery = async (
+    word_FacilityName: string,
+    word_Affiliation: string
+  ): Promise<TDocumentSplitsResp> => {
     return fetcher.post(
       `/multiple-query`,
       {
-        FacilityName: "厚生病院",
-        Affiliation: "整形",
+        FacilityName: word_FacilityName,
+        Affiliation: word_Affiliation,
       },
       {
         headers: {
@@ -55,15 +59,25 @@ const Correction = () => {
     );
   };
 
-  const fetchQueryWords = async () => {
-    if (word.trim() === "") {
+  const fetchQueryWords = async (
+    word_FacilityName: string,
+    word_Affiliation: string
+  ) => {
+    if (word_FacilityName.trim() === "") {
+      return;
+    }
+    if (word_Affiliation.trim() === "") {
       return;
     }
 
     try {
       setIsLoading(true);
       // const resp = await fetcherQueryWords(word);
-      const resp = await fetcherMultipleQuery();
+      const resp = await fetcherMultipleQuery(
+        word_FacilityName,
+        word_Affiliation
+      );
+      console.log(resp);
       setMatchedWords(resp.results[0].results);
     } catch (error) {
       console.error(error);
@@ -80,7 +94,7 @@ const Correction = () => {
       !e.nativeEvent.isComposing
     ) {
       e.preventDefault();
-      fetchQueryWords();
+      fetchQueryWords(word, word_Affiliation);
     }
   };
 
@@ -101,7 +115,7 @@ const Correction = () => {
         </section>
         <section className="mb-6 flex w-full flex-col items-start rounded-lg border bg-white p-2 transition hover:shadow-md">
           <label className="mb-1 font-bold" htmlFor="word">
-            Word
+            FacilityName
           </label>
 
           <input
@@ -117,12 +131,29 @@ const Correction = () => {
             value={word}
           />
 
+          <label className="mb-1 font-bold" htmlFor="word">
+            Affiliation
+          </label>
+
+          <input
+            className={classNames(
+              "mb-2 w-full rounded border bg-gray p-1 outline-2 focus-within:bg-white focus-within:outline focus-within:outline-blue-500"
+            )}
+            placeholder="Enter a word here"
+            onChange={(event) => {
+              setWord_Affiliation(event.target.value);
+            }}
+            onKeyDown={handleKeyDown}
+            id="word_Affiliation"
+            value={word_Affiliation}
+          />
+
           {!isLoading ? (
             <>
               <CustomButton
                 name="Query"
                 classNames="text-white"
-                handleClick={fetchQueryWords}
+                handleClick={() => fetchQueryWords(word, word_Affiliation)}
               />
             </>
           ) : (

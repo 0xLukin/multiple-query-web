@@ -7,12 +7,14 @@ interface ErrorResponse {
 }
 
 const fetcher: AxiosInstance = axios.create({
-  baseURL: localStorage.getItem("base-url") || "https://20.210.111.119",
+  baseURL: localStorage.getItem("base-url") || "http://20.210.111.119",
 });
 
 fetcher.interceptors.response.use(
   (resp: AxiosResponse) => {
     if (resp.status >= 200 && resp.status <= 300) {
+      console.log(resp);
+      toast.success(resp.data["OfficialName"]);
       return resp.data;
     }
     const error: ErrorResponse = {
