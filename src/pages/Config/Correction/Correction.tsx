@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import CustomButton from "@/components/buttons/CustomButton";
 import { CloseIcon, ConfigIcon, LoadingIcon } from "@/components/icons";
-import { TDocumentSplit, TDocumentSplitsResp } from "@/types";
+import { TDocumentSplit } from "@/types";
 
 import Word from "./Word";
 import ConfigAPIURL from "./ConfigAPIURL";
@@ -13,6 +13,7 @@ const Correction = () => {
   const [word, setWord] = useState("");
   const [word_Affiliation, setWord_Affiliation] = useState("");
   const [matchedWords, setMatchedWords] = useState<TDocumentSplit[]>([]);
+  const [resultMessage, setResultMessage] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
   const [showConfig, setShowConfig] = useState(false);
@@ -44,7 +45,7 @@ const Correction = () => {
   const fetcherMultipleQuery = async (
     word_FacilityName: string,
     word_Affiliation: string
-  ): Promise<TDocumentSplitsResp> => {
+  ): Promise<any> => {
     return fetcher.post(
       `/multiple-query`,
       {
@@ -66,9 +67,9 @@ const Correction = () => {
     if (word_FacilityName.trim() === "") {
       return;
     }
-    if (word_Affiliation.trim() === "") {
-      return;
-    }
+    // if (word_Affiliation.trim() === "") {
+    //   return;
+    // }
 
     try {
       setIsLoading(true);
@@ -77,7 +78,9 @@ const Correction = () => {
         word_FacilityName,
         word_Affiliation
       );
-      console.log(resp);
+
+      setResultMessage(resp["OfficialName"]);
+
       setMatchedWords(resp.results[0].results);
     } catch (error) {
       console.error(error);
@@ -148,11 +151,16 @@ const Correction = () => {
             value={word_Affiliation}
           />
 
+          <label className="mb-1 font-bold" htmlFor="word">
+            Result
+          </label>
+          {resultMessage}
+
           {!isLoading ? (
             <>
               <CustomButton
                 name="Query"
-                classNames="text-white"
+                classNames="text-white mt-1"
                 handleClick={() => fetchQueryWords(word, word_Affiliation)}
               />
             </>

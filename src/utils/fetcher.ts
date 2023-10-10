@@ -13,8 +13,6 @@ const fetcher: AxiosInstance = axios.create({
 fetcher.interceptors.response.use(
   (resp: AxiosResponse) => {
     if (resp.status >= 200 && resp.status <= 300) {
-      console.log(resp);
-      toast.success(resp.data["OfficialName"]);
       return resp.data;
     }
     const error: ErrorResponse = {
