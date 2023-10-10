@@ -40,6 +40,26 @@ const Correction = () => {
     );
   };
 
+  const fetcherMultipleQuery = async (
+    word: string
+  ): Promise<TDocumentSplitsResp> => {
+    const collection_id = localStorage.getItem("collection-id");
+    const top_k = localStorage.getItem("display-count");
+
+    return fetcher.post(
+      `/multiple-query`,
+      {
+        FacilityName: "厚生病院",
+        Affiliation: "整形",
+      },
+      {
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTExNjIzOTAyMn0.dxXcGF5oPXlVnR26X_yxcl9KcdCPOEN07Si_oaJoSgE`,
+        },
+      }
+    );
+  };
+
   const fetchQueryWords = async () => {
     if (word.trim() === "") {
       return;
@@ -47,7 +67,8 @@ const Correction = () => {
 
     try {
       setIsLoading(true);
-      const resp = await fetcherQueryWords(word);
+      // const resp = await fetcherQueryWords(word);
+      const resp = await fetcherMultipleQuery(word);
       setMatchedWords(resp.results[0].results);
     } catch (error) {
       console.error(error);

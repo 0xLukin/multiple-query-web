@@ -7,7 +7,7 @@ interface ErrorResponse {
 }
 
 const fetcher: AxiosInstance = axios.create({
-  baseURL: localStorage.getItem("base-url") || "",
+  baseURL: localStorage.getItem("base-url") || "https://20.210.111.119",
 });
 
 fetcher.interceptors.response.use(
