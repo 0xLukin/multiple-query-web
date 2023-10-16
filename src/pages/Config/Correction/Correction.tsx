@@ -47,14 +47,14 @@ const Correction = () => {
     word_Affiliation: string
   ): Promise<any> => {
     return fetcher.post(
-      `/multiple-query`,
+      `/vague_chat`,
       {
-        FacilityName: word_FacilityName,
-        Affiliation: word_Affiliation,
+        hospital_input: word_FacilityName,
+        department_input: word_Affiliation || "",
       },
       {
         headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTExNjIzOTAyMn0.dxXcGF5oPXlVnR26X_yxcl9KcdCPOEN07Si_oaJoSgE`,
+          "Content-Type": "application/json",
         },
       }
     );
@@ -78,8 +78,11 @@ const Correction = () => {
         word_FacilityName,
         word_Affiliation
       );
+      console.log(resp);
 
-      setResultMessage(resp["OfficialName"]);
+      setResultMessage(
+        resp["data"]["hospital"] + " " + resp["data"]["department"]
+      );
 
       setMatchedWords(resp.results[0].results);
     } catch (error) {
@@ -118,7 +121,7 @@ const Correction = () => {
         </section>
         <section className="mb-6 flex w-full flex-col items-start rounded-lg border bg-white p-2 transition hover:shadow-md">
           <label className="mb-1 font-bold" htmlFor="word">
-            FacilityName
+            Hospital
           </label>
 
           <input
@@ -135,7 +138,7 @@ const Correction = () => {
           />
 
           <label className="mb-1 font-bold" htmlFor="word">
-            Affiliation
+            Department
           </label>
 
           <input

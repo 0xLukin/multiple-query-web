@@ -7,7 +7,9 @@ interface ErrorResponse {
 }
 
 const fetcher: AxiosInstance = axios.create({
-  baseURL: localStorage.getItem("base-url") || "http://20.210.111.119",
+  baseURL:
+    localStorage.getItem("base-url") ||
+    "https://azurecustomdataai-abouthomeloving.replit.app",
 });
 
 fetcher.interceptors.response.use(
